@@ -1,110 +1,110 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:get/get.dart';
-import 'package:hanet/pages/components/component.dart';
+import 'package:hanet/models/constants/menu_constants.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  DashboardPage({Key? key}) : super(key: key);
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
-
 class _DashboardPageState extends State<DashboardPage> {
   final _controller = SideMenuController();
+
   int _currentIndex = 0;
+
+  String tabName = "";
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        children: [
-          SideMenu(
-            controller: _controller,
-            backgroundColor: Colors.blue,
-            mode: SideMenuMode.open,
-            builder: (data) {
-              return SideMenuData(
-                header: const Text('Header'),
-                items: [
-                  const SideMenuItemDataTitle(
-                      title: 'Section Header'
-                  ),
-                  SideMenuItemDataTile(
-                    isSelected: _currentIndex == 0,
-                    onTap: () => setState(() => _currentIndex = 0),
-                    title: 'Item 1',
-                    hoverColor: Colors.blue,
-                    titleStyle: const TextStyle(color: Colors.white),
-                    icon: const Icon(Icons.home_outlined),
-                    selectedIcon: const Icon(Icons.home),
-                    badgeContent: const Text(
-                      '23',
-                      style: TextStyle(
-                        fontSize: 8,
-                        color: Colors.white,
+    print(tabName);
+    return SafeArea(
+      child: Scaffold(
+        body: Row(
+          children: [
+            SideMenu(
+              controller: _controller,
+              backgroundColor: Colors.white,
+              minWidth: 60,
+              builder: (data) => SideMenuData(
+                header: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 16, bottom: 16),
+                      height: 32,
+                      width: 32,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        fit: BoxFit.contain,
                       ),
                     ),
-                  ),
-                  SideMenuItemDataTile(
-                    isSelected: _currentIndex == 1,
-                    onTap: () => setState(() => _currentIndex = 1),
-                    title: 'Item 2',
-                    selectedTitleStyle:
-                    const TextStyle(fontWeight: FontWeight.w700,color: Colors.yellow),
-                    icon: const Icon(Icons.table_bar_outlined),
-                    selectedIcon: const Icon(Icons.table_bar),
-                    titleStyle: const TextStyle(color: Colors.deepPurpleAccent),
-                  ),
-                  const SideMenuItemDataTitle(
-                    title: 'Account',
-                    textAlign: TextAlign.center,
-                  ),
-                  SideMenuItemDataTile(
-                    isSelected: _currentIndex == 2,
-                    onTap: () => setState(() => _currentIndex = 2),
-                    title: 'Item 3',
-                    icon: const Icon(Icons.play_arrow),
-                  ),
-                  SideMenuItemDataTile(
-                    isSelected: _currentIndex == 3,
-                    onTap: () => setState(() => _currentIndex = 3),
-                    title: 'Item 4',
-                    icon: const Icon(Icons.car_crash),
-                  ),
-                ],
-                footer: const Text('Footer'),
-              );
-            },
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'body',
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _controller.toggle();
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF232B3E),
+                      ),
+                      onPressed: () {},
+                      child: Text(
+                        "+${data.isOpen ? "  Report" : ""}",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16),
+                      ),
+                    ),
+                    Text("Menu")
+                  ],
+                ),
+                items: [
+                  ...List.generate(
+                    MenuOptions.length,
+                    (index) {
+                      print(index);
+                      Map<String, Object> option = MenuOptions[index];
+                      return SideMenuItemDataTile(
+                        isSelected: index == _currentIndex,
+                        onTap: () {
+                          setState(() {
+                            _currentIndex = index;
+                            tabName = option['title'] as String;
+                          });
+                        },
+                        title: option['title']! as String,
+                        icon: Icon(option['icon']! as IconData),
+                      );
                     },
-                    child: const Text('change side menu state'),
                   )
                 ],
+                footer: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text("Profile"),
+                      Container(
+                        decoration: BoxDecoration(shape: BoxShape.circle),
+                        width: 48,
+                        height: 48,
+                        child: Image.asset(
+                          'assets/images/avatar.png',
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    ]),
               ),
             ),
-          ),
-          SideMenu(
-            position: SideMenuPosition.right,
-            builder: (data) => const SideMenuData(
-              customChild: Text('custom view'),
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                child: Center(
+                  child: Text(
+                    tabName,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
