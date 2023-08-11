@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:hanet/models/constants/menu_constants.dart';
 
 class DashboardPage extends StatefulWidget {
-  DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({Key? key}) : super(key: key);
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -54,16 +54,19 @@ class _DashboardPageState extends State<DashboardPage> {
                             fontSize: 16),
                       ),
                     ),
-                    Text("Menu")
+                    SizedBox(height: 20,)
                   ],
                 ),
                 items: [
                   ...List.generate(
-                    MenuOptions.length,
+                    menuOptions.length,
                     (index) {
                       print(index);
-                      Map<String, Object> option = MenuOptions[index];
+                      Map<String, Object> option = menuOptions[index];
                       return SideMenuItemDataTile(
+                        highlightSelectedColor: Colors.green,
+                        hoverColor: Colors.grey,
+                        hasSelectedLine: false,
                         isSelected: index == _currentIndex,
                         onTap: () {
                           setState(() {

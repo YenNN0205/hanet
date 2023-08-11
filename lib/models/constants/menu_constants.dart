@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final List<Map<String, Object>> MenuOptions = [
+final List<Map<String, Object>> menuOptions = [
   {
     "title": "Menu",
     "icon": Icons.apps,
