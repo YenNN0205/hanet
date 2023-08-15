@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:get/get.dart';
+import 'package:hanet/pages/page.dart';
 import 'package:hanet/models/constants/menu_constants.dart';
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _HomePageState extends State<HomePage> {
   final _controller = SideMenuController();
 
   int _currentIndex = 0;
 
   String tabName = "";
+  
+  List<Widget> widgetOptions = [
+    DashBoardPage(),
+    AllEmployeesPage(),
+    Container(color: Colors.blue),
+    Container(color: Colors.purple),
+    Container(color: Colors.green),
+    Container(color: Colors.amber),
+    Container(color: Colors.teal),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +59,13 @@ class _DashboardPageState extends State<DashboardPage> {
                       onPressed: () {},
                       child: Text(
                         "+${data.isOpen ? "  Report" : ""}",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
                             fontSize: 16),
                       ),
                     ),
-                    SizedBox(height: 20,)
+                   SizedBox(height: 20,)
                   ],
                 ),
                 items: [
@@ -83,8 +94,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 footer: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text("Profile"),
+                      const Text("Profile", style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16)),
                       Container(
+                       margin: EdgeInsets.only(bottom: 24,top: 8),
                         decoration: BoxDecoration(shape: BoxShape.circle),
                         width: 48,
                         height: 48,
@@ -93,18 +108,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           fit: BoxFit.contain,
                         ),
                       )
-                    ]),
+                    ],
+                ),
               ),
             ),
             Expanded(
-              child: Container(
-                color: Colors.white,
-                child: Center(
-                  child: Text(
-                    tabName,
-                  ),
-                ),
-              ),
+              child: widgetOptions.elementAt(_currentIndex),
             ),
           ],
         ),
