@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hanet/controllers/controller.dart';
 import 'package:hanet/pages/dashboard/page.dart';
 import 'package:hanet/models/constants/route.c.dart';
 import 'package:hanet/scroll_behavior.dart';
 import 'package:get/get.dart';
 
 void main() {
+  // init all instance of controller
+  RootController.initControllers();
   runApp(const MyApp());
 }
 

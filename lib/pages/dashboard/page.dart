@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hanet/layout/app_layout.dart';
+import 'package:hanet/pages/dashboard/sections/overview_section.dart';
+import 'package:hanet/pages/dashboard/sections/schedule_section.dart';
+import 'package:hanet/pages/dashboard/sections/traffic_status_section.dart';
+import 'package:hanet/pages/dashboard/sections/traffic_table_section.dart';
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({Key? key}) : super(key: key);
@@ -9,22 +13,21 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  // final _controller = SideMenuController();
-
-  // int _currentIndex = 0;
-
-  // ignore: prefer_const_declarations
-  static final CAMERA_URL =
-      "rtsp://192.168.68.182:554/user:1cinnovation;pwd:1cinnovation123";
-
-  String tabName = "";
-
+  final sections = [
+    TrafficTableSection(),
+    TrafficStatusSection(),
+    OverviewSection(),
+    ScheduleSection(),
+  ];
   @override
   Widget build(BuildContext context) {
-    print(tabName);
     return AppLayout(
-      child: Container(
-        child: Text("Dashboard Page"),
+      child: SingleChildScrollView(
+        child: Container(
+          child: Wrap(
+            children: sections,
+          ),
+        ),
       ),
     );
   }

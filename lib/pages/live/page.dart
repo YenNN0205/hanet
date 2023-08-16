@@ -62,11 +62,13 @@ class _LiveScreenState extends State<LiveScreen> {
     }
 
     return AppLayout(
-        child: Container(
-      width: size.width,
-      height: size.width / 16 * 9,
-      color: Colors.black,
-      child: child,
+        child: Center(
+      child: Container(
+        width: size.width,
+        height: size.width / 16 * 9,
+        color: Colors.black,
+        child: child,
+      ),
     ));
   }
 
