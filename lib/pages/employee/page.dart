@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hanet/components/SearchButton.dart';
+import 'package:hanet/controllers/person/person.ctrl.dart';
 import 'package:hanet/layout/app_layout.dart';
 import 'package:hanet/models/constants/colors.c.dart';
 import 'package:hanet/models/constants/styles.c.dart';
@@ -31,7 +33,8 @@ class EmployeeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = Get.size;
+    final personCtrl = Get.find<PersonController>();
+    personCtrl.getPeopleByPlace("18265");
     final employeeSource = EmployeeDataSource(employees: employees);
     return AppLayout(
       child: Container(
@@ -85,28 +88,7 @@ class EmployeeScreen extends StatelessWidget {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4.0)),
-                      width: 180,
-                      padding: EdgeInsets.only(
-                        right: 8,
-                      ),
-                      child: TextField(
-                        style: TextStyle(fontSize: 13),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Search by name...",
-                          contentPadding: EdgeInsets.only(
-                            top: 14,
-                          ),
-                          prefixIcon: Icon(Icons.search_rounded),
-                          fillColor: Colors.white,
-                        ),
-                        controller: TextEditingController(),
-                      ),
-                    ),
+                    SearchButton(),
                     Obx(
                       () => Container(
                         padding: EdgeInsets.symmetric(horizontal: 8),
