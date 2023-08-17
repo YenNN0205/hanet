@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   flutter_side_menu: ^0.4.0
+  flutter_vlc_player: ^7.2.0
+  syncfusion_flutter_datagrid: ^22.2.9
 
 dev_dependencies:
   flutter_test:
