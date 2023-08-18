@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hanet/controllers/menu.ctrl.dart';
+import 'package:hanet/controllers/config/menu.ctrl.dart';
 import 'package:hanet/models/constants/menu.c.dart';
-import 'package:hanet/resources/images/image.dart';
+import 'package:hanet/models/constants/resources/images/image.dart';
 
 class AppLayout extends StatelessWidget {
   final Widget child;
