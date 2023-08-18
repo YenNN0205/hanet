@@ -5,6 +5,9 @@ import 'package:hanet/models/person/person.d.dart';
 import 'package:hanet/models/respond/respond.d.dart';
 
 class PersonController extends GetxController {
+  RxMap<String, List<HanetPerson>> peopleMap =
+      <String, List<HanetPerson>>{}.obs;
+
   Future<List<HanetPerson>> getPeopleByPlace(String placeId) async {
     List<HanetPerson> people = [];
     final respond = await ApiHanlder.post('/person/getListByPlace', body: {

@@ -27,9 +27,19 @@ final List<Map<String, Object>> MenuOptions = [
     "route": Routes.PLACE,
   },
   {
+    "title": "Department",
+    "icon": Icons.domain,
+    "route": Routes.DEPARTMENT,
+  },
+  {
     "title": "Camera Live",
     "icon": Icons.camera_roll,
     "route": Routes.LIVE,
+  },
+  {
+    "title": "Attendance",
+    "icon": Icons.checklist_rtl_sharp,
+    "route": Routes.ATTENDANCE,
   },
   {
     "title": "Announcement",

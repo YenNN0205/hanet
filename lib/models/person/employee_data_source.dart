@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hanet/models/employee/employee.d.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
+import 'employee.d.dart';
 
 class EmployeeDataSource extends DataGridSource {
   late final List<Employee> employees;

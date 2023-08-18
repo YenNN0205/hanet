@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-class FilterButton extends StatelessWidget {
+class TextIconButton extends StatelessWidget {
+  final Widget text;
+  final Widget icon;
   final Function()? onClick;
-  const FilterButton({
+  const TextIconButton({
+    required this.text,
+    required this.icon,
     this.onClick,
     super.key,
   });
@@ -15,12 +19,12 @@ class FilterButton extends StatelessWidget {
           onClick!();
         }
       },
-      child: Row(
-        children: [Icon(Icons.filter_alt_outlined), Text("Filter")],
-      ),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+      ),
+      child: Row(
+        children: [icon, text],
       ),
     );
   }

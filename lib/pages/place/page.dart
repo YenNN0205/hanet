@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hanet/components/FilterButton.dart';
+import 'package:hanet/components/TextIconButton.dart';
 import 'package:hanet/components/PlaceCard.dart';
 import 'package:hanet/components/SearchButton.dart';
 import 'package:hanet/controllers/place/place.ctrl.dart';
@@ -43,7 +43,10 @@ class PlaceScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SearchButton(),
-                    FilterButton(),
+                    TextIconButton(
+                      text: Text("Filter"),
+                      icon: Icon(Icons.filter_alt_outlined),
+                    ),
                   ]),
             ),
             Container(

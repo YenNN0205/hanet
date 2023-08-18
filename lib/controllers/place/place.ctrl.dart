@@ -10,8 +10,10 @@ import 'package:hanet/models/respond/respond.d.dart';
 class PlaceController extends GetxController {
   // stored data
   RxList<HanetPlace> places = <HanetPlace>[].obs;
-  Map<String, RxList<HanetDepartment>> departmentsMap =
-      Map(); // map placeID with department list
+
+  RxMap<String, List<HanetDepartment>> departmentsMap =
+      (<String, List<HanetDepartment>>{})
+          .obs; // map placeID with department list
 
   // place config
   static const String PLACE_PATH = "/place";
@@ -55,7 +57,8 @@ class PlaceController extends GetxController {
     try {
       if (respond.statusCode == 200) {
         HanetRespond respondData = HanetRespond.fromJson(respond.data);
-        for (var department in respondData.data) {
+
+        for (var department in respondData.data["hits"]) {
           departments.add(HanetDepartment.fromJson(department));
         }
       }
