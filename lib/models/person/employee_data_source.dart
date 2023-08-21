@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hanet/controllers/place/place.ctrl.dart';
+import 'package:hanet/models/constants/styles.c.dart';
+import 'package:hanet/models/department/department.d.dart';
+import 'package:hanet/models/person/person.d.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import 'employee.d.dart';
@@ -6,14 +11,9 @@ import 'employee.d.dart';
 class EmployeeDataSource extends DataGridSource {
   late final List<Employee> employees;
 
-  static const TextStyle cellText = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    color: Colors.black,
-  );
-
   List<DataGridRow> _employeeRows = [];
 
+  @override
   List<DataGridRow> get rows => _employeeRows;
 
   EmployeeDataSource({required this.employees}) {
@@ -56,12 +56,18 @@ class EmployeeDataSource extends DataGridSource {
             );
           }
           if (e.columnName == "profile") {
-            //TODO: replace employee image url with real data
+            String profileURL = "";
+            if (e.value != null) {
+              profileURL = e.value.toString();
+            }
             return Container(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: const CircleAvatar(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: CircleAvatar(
                 radius: 12,
                 backgroundColor: Colors.grey,
+                backgroundImage: NetworkImage(
+                  profileURL,
+                ),
               ),
             );
           }
@@ -69,9 +75,36 @@ class EmployeeDataSource extends DataGridSource {
             padding: EdgeInsets.symmetric(vertical: 4),
             child: Text(
               e.value,
-              style: cellText,
+              style: HanetTextStyles.cellText,
             ),
           );
         }).toList());
+  }
+
+  // ensure people in same place
+  static List<Employee> convertListPersonInPlace(List<HanetPerson> people) {
+    List<Employee> ret = <Employee>[];
+
+    if (people.isNotEmpty) {
+      final placeId = people[0].placeID ?? 0;
+      final departmentList =
+          Get.find<PlaceController>().departmentsMap[placeId.toString()] ??
+              <HanetDepartment>[];
+
+      print(departmentList.length);
+      HanetDepartment defaultDepartment = HanetDepartment(name: "");
+      for (var person in people) {
+        HanetDepartment? department = departmentList
+            .firstWhereOrNull((element) => (element.id == person.departmentID));
+
+        //add employee to ret
+
+        Employee employee = EmployeeBuilder.fromPersonAndDepartment(
+            person, department ?? defaultDepartment);
+        ret.add(employee);
+      }
+    }
+
+    return ret;
   }
 }
