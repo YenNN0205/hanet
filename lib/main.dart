@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hanet/controllers/controller.dart';
-import 'package:hanet/pages/dashboard/page.dart';
 import 'package:hanet/models/constants/route.c.dart';
 import 'package:hanet/scroll_behavior.dart';
 import 'package:get/get.dart';
@@ -13,6 +12,7 @@ void main() async {
   RootController.initControllers();
   // init data before run
   await RootController.initData();
+  print("Done init data");
   runApp(const MyApp());
 }
 

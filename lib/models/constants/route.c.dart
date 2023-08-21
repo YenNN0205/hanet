@@ -7,6 +7,8 @@ import 'package:hanet/pages/department/page.dart';
 import 'package:hanet/pages/employee/page.dart';
 import 'package:hanet/pages/live/page.dart';
 import 'package:hanet/pages/place/page.dart';
+import 'package:hanet/pages/splash/splash_builder.dart';
+import 'package:hanet/pages/splash/splash_page.dart';
 
 class Routes {
   static String DASHBOARD = "/dashboard";
