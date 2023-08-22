@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 void main() async {
   //load env data
-  await dotenv.load();
+  await dotenv.load(fileName: 'env');
   // init all instance of controller
   RootController.initControllers();
   // init data before run
