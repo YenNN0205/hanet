@@ -138,24 +138,23 @@ class DepartmentScreen extends StatelessWidget {
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                        children: [
-                                          ...(placeCtrl.departmentsMap[placeCtrl
-                                                      .places[
-                                                          selectedIndex.value]
-                                                      .id
-                                                      .toString()] ??
-                                                  [])
-                                              .map((element) => PlaceItem(
-                                                  text: Text((element
-                                                              as HanetDepartment)
-                                                          .name ??
-                                                      "")))
-                                              .toList(),
-                                          ...List.generate(
-                                              12,
-                                              (index) => PlaceItem(
-                                                  text: Text("IT Dev")))
-                                        ],
+                                        children: (placeCtrl.departmentsMap[
+                                                    placeCtrl
+                                                        .places[
+                                                            selectedIndex.value]
+                                                        .id
+                                                        .toString()] ??
+                                                [])
+                                            .map((element) => Container(
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 8),
+                                                  child: PlaceItem(
+                                                      text: Text((element
+                                                                  as HanetDepartment)
+                                                              .name ??
+                                                          "")),
+                                                ))
+                                            .toList(),
                                       ),
                                     )
                                   : const SizedBox(),

@@ -20,7 +20,7 @@ class AttendanceDataSource extends DataGridSource {
     handleCheckInData();
     _attendanceRows = attendanceMap.values.map((e) {
       AttendanceStatus status = AttendanceStatus.PRESENT;
-      print(e.toJson());
+
       if (e.checkIn == null && e.checkOut == null) {
         status = AttendanceStatus.ABSENT;
       } else if (e.checkIn != null) {
@@ -33,7 +33,6 @@ class AttendanceDataSource extends DataGridSource {
         }
       }
 
-      print("Status: " + status.toString());
       return DataGridRow(cells: [
         DataGridCell(columnName: "profile", value: e.person!.avatar ?? ''),
         DataGridCell(columnName: "name", value: e.person!.name ?? ""),
@@ -61,7 +60,7 @@ class AttendanceDataSource extends DataGridSource {
         Attendance attendance = Attendance();
         final checkInListByPerson =
             checkIns.where((e) => e.personID == personID).toList();
-        print("Check in get: " + checkInListByPerson.length.toString());
+
         attendance.person = person;
         for (var checkIn in checkInListByPerson) {
           // assign data
@@ -113,8 +112,7 @@ class AttendanceDataSource extends DataGridSource {
             case "time_in":
             case "time_out":
               DateTime? attTime = e.value;
-              print("Att time");
-              print(attTime);
+
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 4),
                 child: Text(
