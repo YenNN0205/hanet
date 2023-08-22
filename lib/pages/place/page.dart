@@ -7,7 +7,6 @@ import 'package:hanet/controllers/place/place.ctrl.dart';
 import 'package:hanet/layout/app_layout.dart';
 import 'package:hanet/models/constants/colors.c.dart';
 import 'package:hanet/models/constants/styles.c.dart';
-import 'package:hanet/models/place/place.d.dart';
 
 class PlaceScreen extends StatelessWidget {
   const PlaceScreen({super.key});
@@ -20,8 +19,7 @@ class PlaceScreen extends StatelessWidget {
       child: Container(
         color: HanetColors.contentBackground,
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             Text(
               'Place',
@@ -51,6 +49,7 @@ class PlaceScreen extends StatelessWidget {
             ),
             Container(
               color: Colors.white,
+              constraints: BoxConstraints(maxHeight: Get.size.height - 200),
               width: double.infinity,
               // height: double.infinity,
               padding: const EdgeInsets.all(16.0),
@@ -61,7 +60,7 @@ class PlaceScreen extends StatelessWidget {
                         ))
                     .toList(),
               ),
-            )
+            ),
           ],
         ),
       ),

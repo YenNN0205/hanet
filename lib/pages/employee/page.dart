@@ -6,6 +6,7 @@ import 'package:hanet/controllers/place/place.ctrl.dart';
 import 'package:hanet/layout/app_layout.dart';
 import 'package:hanet/layout/data_list_layout.dart';
 import 'package:hanet/models/constants/styles.c.dart';
+import 'package:hanet/models/place/place.d.dart';
 
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -22,28 +23,28 @@ class EmployeeScreen extends StatefulWidget {
 class _EmployeeScreenState extends State<EmployeeScreen> {
   RxList<Employee> employees = <Employee>[].obs;
 
-  final List<String> places = [
-    "Ha Noi",
-    "Da Nang",
-    "Ho Chi Minh City",
-  ];
+  RxInt selectedPlaceIndex = (-1).obs;
+  late final List<HanetPlace> places;
 
   @override
   void initState() {
     super.initState();
     final personCtrl = Get.find<PersonController>();
     final placeCtrl = Get.find<PlaceController>();
-    String placeID = placeCtrl.places[0].id.toString();
-    employees.value = EmployeeDataSource.convertListPersonInPlace(
-        personCtrl.peopleMap[placeID] ?? []);
-    if (placeCtrl.places.isNotEmpty) {
+    places = placeCtrl.places;
+
+    if (places.isNotEmpty) {
+      selectedPlaceIndex.value = 0;
+      String placeID = places[selectedPlaceIndex.value].id.toString();
+      // load old data
+      employees.value = EmployeeDataSource.convertListPersonInPlace(
+          personCtrl.peopleMap[placeID] ?? []);
+      // refresh data background
       personCtrl.getPeopleByPlace(placeID).then((people) {
         employees.value = EmployeeDataSource.convertListPersonInPlace(people);
       });
     }
   }
-
-  Rx<String?> selectedPlace = Rx(null);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                             () => Container(
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               color: Colors.white,
-                              child: DropdownButton(
+                              child: DropdownButton<int>(
                                   hint: Text(
                                     "Place...",
                                     style: HanetTextStyles.buttonText
@@ -74,22 +75,23 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                                   ),
                                   icon: Icon(Icons.arrow_drop_down),
                                   underline: const SizedBox(),
-                                  value: selectedPlace.value,
+                                  value: selectedPlaceIndex.value >= 0
+                                      ? selectedPlaceIndex.value
+                                      : null,
                                   padding: EdgeInsets.zero,
-                                  items: places
-                                      .map(
-                                        (e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(
-                                            e,
-                                            style: HanetTextStyles.buttonText
-                                                .copyWith(color: Colors.black),
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
+                                  items: List.generate(
+                                    places.length,
+                                    (index) => DropdownMenuItem(
+                                      value: index,
+                                      child: Text(
+                                        places[index].name ?? "",
+                                        style: HanetTextStyles.buttonText
+                                            .copyWith(color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
                                   onChanged: (val) {
-                                    selectedPlace.value = val;
+                                    selectedPlaceIndex.value = val ?? -1;
                                   }),
                             ),
                           )
@@ -99,77 +101,82 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     children: [
                       Expanded(
                         child: Obx(
-                          () => SfDataGrid(
-                              source: EmployeeDataSource(employees: employees),
-                              columns: [
-                                GridColumn(
-                                  width: 80,
-                                  columnName: "profile",
-                                  label: Container(
-                                    color: Colors.white,
-                                    alignment: Alignment.center,
-                                    child: const Text(
-                                      "Profile",
-                                      style: HanetTextStyles.columnTitle,
+                          () => Container(
+                            constraints:
+                                BoxConstraints(maxHeight: Get.size.height),
+                            child: SfDataGrid(
+                                source:
+                                    EmployeeDataSource(employees: employees),
+                                columns: [
+                                  GridColumn(
+                                    width: 80,
+                                    columnName: "profile",
+                                    label: Container(
+                                      color: Colors.white,
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        "Profile",
+                                        style: HanetTextStyles.columnTitle,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                GridColumn(
-                                    columnWidthMode: ColumnWidthMode.fill,
-                                    columnName: "name",
-                                    minimumWidth: 150,
-                                    allowSorting: true,
+                                  GridColumn(
+                                      columnWidthMode: ColumnWidthMode.fill,
+                                      columnName: "name",
+                                      minimumWidth: 150,
+                                      allowSorting: true,
+                                      label: Container(
+                                          color: Colors.white,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("Name",
+                                              style: HanetTextStyles
+                                                  .columnTitle))),
+                                  GridColumn(
+                                      columnWidthMode:
+                                          ColumnWidthMode.fitByCellValue,
+                                      allowSorting: true,
+                                      minimumWidth: 100,
+                                      columnName: "postion",
+                                      label: Container(
+                                          color: Colors.white,
+                                          alignment: Alignment.centerLeft,
+                                          child: const Text("Postion",
+                                              style: HanetTextStyles
+                                                  .columnTitle))),
+                                  GridColumn(
+                                      columnName: "categorize",
+                                      minimumWidth: 150,
+                                      columnWidthMode: ColumnWidthMode.fill,
+                                      allowSorting: true,
+                                      label: Container(
+                                          color: Colors.white,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("Categorize",
+                                              style: HanetTextStyles
+                                                  .columnTitle))),
+                                  GridColumn(
+                                      columnName: "department",
+                                      columnWidthMode: ColumnWidthMode.fill,
+                                      allowSorting: true,
+                                      minimumWidth: 200,
+                                      label: Container(
+                                          color: Colors.white,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("Department",
+                                              style: HanetTextStyles
+                                                  .columnTitle))),
+                                  GridColumn(
+                                    width: 100,
+                                    columnName: "actions",
                                     label: Container(
-                                        color: Colors.white,
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("Name",
-                                            style:
-                                                HanetTextStyles.columnTitle))),
-                                GridColumn(
-                                    columnWidthMode:
-                                        ColumnWidthMode.fitByCellValue,
-                                    allowSorting: true,
-                                    minimumWidth: 100,
-                                    columnName: "postion",
-                                    label: Container(
-                                        color: Colors.white,
-                                        alignment: Alignment.centerLeft,
-                                        child: const Text("Postion",
-                                            style:
-                                                HanetTextStyles.columnTitle))),
-                                GridColumn(
-                                    columnName: "categorize",
-                                    minimumWidth: 150,
-                                    columnWidthMode: ColumnWidthMode.fill,
-                                    allowSorting: true,
-                                    label: Container(
-                                        color: Colors.white,
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("Categorize",
-                                            style:
-                                                HanetTextStyles.columnTitle))),
-                                GridColumn(
-                                    columnName: "department",
-                                    columnWidthMode: ColumnWidthMode.fill,
-                                    allowSorting: true,
-                                    minimumWidth: 200,
-                                    label: Container(
-                                        color: Colors.white,
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("Department",
-                                            style:
-                                                HanetTextStyles.columnTitle))),
-                                GridColumn(
-                                  width: 100,
-                                  columnName: "actions",
-                                  label: Container(
-                                    color: Colors.white,
-                                    alignment: Alignment.center,
-                                    child: Text("Actions",
-                                        style: HanetTextStyles.columnTitle),
+                                      color: Colors.white,
+                                      alignment: Alignment.center,
+                                      child: Text("Actions",
+                                          style: HanetTextStyles.columnTitle),
+                                    ),
                                   ),
-                                ),
-                              ]),
+                                ]),
+                          ),
                         ),
                       ),
                     ],
