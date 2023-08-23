@@ -162,7 +162,7 @@ class StatusCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         decoration: BoxDecoration(
           color: backgroundColor.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(4.0),
+          borderRadius: BorderRadius.circular(8.0),
         ),
         alignment: Alignment.center,
         child: Text(

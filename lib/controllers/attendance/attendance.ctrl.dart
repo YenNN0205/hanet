@@ -14,7 +14,7 @@ class AttendanceController extends GetxController {
     int? to,
     int type = 0,
     int page = 1,
-    int perPage = 24,
+    int? perPage,
   }) async {
     List<HanetCheckIn> ret = [];
     final deviceCtrl = Get.find<DeviceController>();
