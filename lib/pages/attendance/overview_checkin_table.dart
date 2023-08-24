@@ -31,13 +31,14 @@ class _OverviewCheckInTableState extends State<OverviewCheckInTable> {
     print("init overview");
     super.initState();
     attendanceCtrl = Get.find<AttendanceController>();
-    daysInMonth = DateUtils.getDaysInMonth(
-        widget.pickedMonth.year, widget.pickedMonth.month);
+
     // getCheckInData();
   }
 
   void getCheckInData() {
     isLoading.value = true;
+    daysInMonth = DateUtils.getDaysInMonth(
+        widget.pickedMonth.year, widget.pickedMonth.month);
     attendanceCtrl
         .getCheckInListInTimestamp(
       placeID: widget.placeID,
@@ -54,13 +55,16 @@ class _OverviewCheckInTableState extends State<OverviewCheckInTable> {
 
   @override
   Widget build(BuildContext context) {
-    // print("Rebuild UI");
     getCheckInData();
     return Obx(
       () => isLoading.value
-          ? Container(
-              child: CircularProgressIndicator(),
-              color: Colors.amber,
+          ? Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                ),
+              ],
             )
           : SfDataGrid(
               source: AttendanceMonthDataSource(

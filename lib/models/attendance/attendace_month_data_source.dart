@@ -57,14 +57,28 @@ class AttendanceMonthDataSource extends DataGridSource {
     _attendanceDatas = List.generate(
         people.length,
         (peopleIndex) =>
-            List.generate(dayInMonth, (_) => AttendanceStatus.ABSENT));
+            List.generate(dayInMonth, (_) => AttendanceStatus.OTHER));
 
-    for (int i = 0; i > people.length; i++) {
+    for (int i = 0; i < people.length; i++) {
+      List<AttendanceStatus> personStatusList;
+      // skip if no check in datas exist
+      if (checkIns.length == 0) {
+        personStatusList =
+            List.generate(dayInMonth, (index) => AttendanceStatus.OTHER);
+        _attendanceDatas[i] = personStatusList;
+        continue;
+      }
       try {
         String personID = people[i].personID ?? "";
         // generate list attendance status for person
-        List<AttendanceStatus> personStatusList =
-            List.generate(dayInMonth, (index) => AttendanceStatus.ABSENT);
+        personStatusList = List.generate(dayInMonth, (index) {
+          DateTime d = pickedMonth.copyWith(day: index + 1);
+          // display no data for cell has day over current datas
+          if (d.compareTo(DateTime.now()) <= 0) {
+            return AttendanceStatus.ABSENT;
+          }
+          return AttendanceStatus.OTHER;
+        });
         // find all check in map with person
         final checkInListByPerson =
             checkIns.where((e) => e.personID == personID).toList();
@@ -78,7 +92,6 @@ class AttendanceMonthDataSource extends DataGridSource {
             } else {
               personStatusList[statusIndex] = AttendanceStatus.PRESENT;
             }
-            print(personID + " - " + personStatusList[statusIndex].toString());
           }
           // remove in checkIns data
           checkIns.remove(checkIn);
@@ -121,14 +134,26 @@ class AttendanceMonthDataSource extends DataGridSource {
           }
           // index column name
           AttendanceStatus status = e.value;
-          Color iconColor = Colors.red.shade800;
-          IconData iconData = Icons.close_rounded;
-          if (status == AttendanceStatus.LATE) {
-            iconColor = Colors.yellow.shade800;
-            iconData = Icons.directions_run_rounded;
-          } else if (status == AttendanceStatus.PRESENT) {
-            iconColor = Colors.green.shade700;
-            iconData = Icons.check;
+          Color? iconColor;
+          IconData? iconData;
+
+          switch (status) {
+            case AttendanceStatus.ABSENT:
+              iconColor = Colors.red.shade800;
+              iconData = Icons.close_rounded;
+              break;
+            case AttendanceStatus.LATE:
+              iconColor = Colors.yellow.shade800;
+              iconData = Icons.directions_run_rounded;
+              break;
+            case AttendanceStatus.PRESENT:
+              iconColor = Colors.green.shade700;
+              iconData = Icons.check;
+              break;
+
+            default:
+              iconColor = Colors.white;
+              iconData = null;
           }
 
           return Container(
@@ -139,46 +164,5 @@ class AttendanceMonthDataSource extends DataGridSource {
             ),
           );
         }).toList());
-  }
-}
-
-class StatusCard extends StatelessWidget {
-  static const TextStyle statusStyle = TextStyle(
-    fontSize: 13,
-    fontWeight: FontWeight.w700,
-  );
-  final AttendanceStatus status;
-  const StatusCard({required this.status, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    String label = "Present";
-    Color backgroundColor = Colors.green.shade900;
-    switch (status) {
-      case AttendanceStatus.ABSENT:
-        label = "Absent";
-        backgroundColor = Colors.red.shade800;
-        break;
-      case AttendanceStatus.LATE:
-        label = "Late";
-        backgroundColor = Colors.yellow.shade600;
-        break;
-      default:
-    }
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(maxWidth: 80, maxHeight: 30),
-        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-        decoration: BoxDecoration(
-          color: backgroundColor.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          label,
-          style: statusStyle.copyWith(color: backgroundColor),
-        ),
-      ),
-    );
   }
 }

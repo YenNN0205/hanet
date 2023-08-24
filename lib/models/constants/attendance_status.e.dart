@@ -7,4 +7,5 @@ enum AttendanceStatus {
   PRESENT,
   LATE,
   ABSENT,
+  OTHER,
 }
