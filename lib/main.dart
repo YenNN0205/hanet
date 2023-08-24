@@ -4,6 +4,7 @@ import 'package:hanet/controllers/controller.dart';
 import 'package:hanet/models/constants/route.c.dart';
 import 'package:hanet/scroll_behavior.dart';
 import 'package:get/get.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
 void main() async {
   //load env data
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      localizationsDelegates: [
+        MonthYearPickerLocalizations.delegate,
+      ],
       debugShowCheckedModeBanner: false,
       scrollBehavior: MyCustomScrollBehavior(),
       title: 'Hanet:1C',

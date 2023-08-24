@@ -15,19 +15,27 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final sections = [
     TrafficTableSection(),
-    TrafficStatusSection(),
+    // TrafficStatusSection(),
     OverviewSection(),
-    ScheduleSection(),
+    // ScheduleSection(),
   ];
   @override
   Widget build(BuildContext context) {
     return AppLayout(
       child: SingleChildScrollView(
         child: Container(
-          child: Wrap(
-            children: sections,
-          ),
-        ),
+            color: Colors.white,
+            width: double.infinity,
+            child: MediaQuery.of(context).size.width <= 500
+                ? Column(
+                    children: sections,
+                  )
+                : GridView.count(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    children: sections,
+                  )),
       ),
     );
   }
