@@ -21,6 +21,7 @@ class AttendanceMonthDataSource extends DataGridSource {
   late final PersonController personController;
   late final List<HanetPerson> people;
   late List<List<AttendanceStatus>> _attendanceDatas;
+
   AttendanceMonthDataSource({
     required this.placeID,
     required this.pickedMonth,

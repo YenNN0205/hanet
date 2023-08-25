@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hanet/controllers/attendance/attendance.ctrl.dart';
 import 'package:hanet/controllers/place/place.ctrl.dart';
+import 'package:hanet/models/attendance/attendance_data_source.dart';
+import 'package:hanet/models/attendance/checkin.d.dart';
+import 'package:hanet/models/constants/styles.c.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../models/attendance/attendance_data_source.dart';
-import '../../models/attendance/checkin.d.dart';
-import '../../models/constants/styles.c.dart';
 
 class TodayCheckInTable extends StatefulWidget {
   final String placeID;
