@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hanet/controllers/config/menu.ctrl.dart';
+// import 'package:hanet/controllers/config/menu.ctrl.dart';
 import 'package:hanet/models/constants/menu.c.dart';
 import 'package:hanet/models/constants/resources/images/image.dart';
 
@@ -10,7 +10,7 @@ class AppLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final menuCtrl = Get.find<MenuItemController>();
+    // final menuCtrl = Get.find<MenuItemController>();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -56,17 +56,15 @@ class AppLayout extends StatelessWidget {
                     MenuOptions.length,
                     (index) {
                       Map<String, Object> option = MenuOptions[index];
-                      return Obx(
-                        () => ListTile(
-                          // isSelected: index == _currentIndex,
-                          onTap: () {
-                            menuCtrl.selectedMenuIndex.value = index;
-                            Get.toNamed(option['route'] as String);
-                          },
-                          title: Text(option['title']! as String),
-                          leading: Icon(option['icon']! as IconData),
-                          selected: index == menuCtrl.selectedMenuIndex.value,
-                        ),
+                      return ListTile(
+                        // isSelected: index == _currentIndex,
+                        onTap: () {
+                          // menuCtrl.selectedMenuIndex.value = index;
+                          Get.toNamed(option['route'] as String);
+                        },
+                        title: Text(option['title']! as String),
+                        leading: Icon(option['icon']! as IconData),
+                        // selected: index == menuCtrl.selectedMenuIndex.value,
                       );
                     },
                   )
