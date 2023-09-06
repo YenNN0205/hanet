@@ -16,8 +16,9 @@ import '../constants/styles.c.dart';
 class AttendanceDataSource extends DataGridSource {
   final List<HanetCheckIn> checkIns;
   late final Map<String, Attendance> attendanceMap;
-  late final PersonController personController;
-  AttendanceDataSource({required this.checkIns}) {
+  final List<HanetPerson> peopleList;
+
+  AttendanceDataSource({required this.checkIns, required this.peopleList}) {
     handleCheckInData();
     _attendanceRows = attendanceMap.values.map((e) {
       AttendanceStatus status = AttendanceStatus.PRESENT;
@@ -48,13 +49,17 @@ class AttendanceDataSource extends DataGridSource {
 
   @override
   List<DataGridRow> get rows => _attendanceRows;
+  // static const timeOptions = {
+  //   "hourCycle": 'h23',
+  //   "hour": '2-digit',
+  //   "minute": '2-digit'
+  // };
 
   //process checkin data
   void handleCheckInData() {
     attendanceMap = <String, Attendance>{};
-    personController = Get.find<PersonController>();
-    //TODO: handle error later
-    final people = personController.peopleMap['18265'] ?? <HanetPerson>[];
+    final people = peopleList;
+    print("Checkin passing get: ${checkIns.length}");
     for (var person in people) {
       try {
         String personID = person.personID ?? "";
@@ -63,16 +68,22 @@ class AttendanceDataSource extends DataGridSource {
             checkIns.where((e) => e.personID == personID).toList();
 
         attendance.person = person;
+        List<DateTime> checkTimes = [];
         for (var checkIn in checkInListByPerson) {
-          // assign data
-          DateTime checkinTime =
-              DateTime.fromMillisecondsSinceEpoch(checkIn.checkinTime ?? 0);
-          if (attendance.checkIn == null) {
-            attendance.checkIn = checkinTime;
-          } else {
-            attendance.checkOut = checkinTime;
+          checkTimes.add(
+              DateTime.fromMillisecondsSinceEpoch(checkIn.checkinTime ?? 0));
+        }
+        // assgin check-in and check-out data
+        if (checkTimes.isNotEmpty) {
+          attendance.checkIn = checkTimes[0];
+          if (checkTimes.length > 1) {
+            // sort desc
+            checkTimes.sort((a, b) => a.compareTo(b));
+            attendance.checkIn = checkTimes[0];
+            attendance.checkOut = checkTimes[checkTimes.length - 1];
           }
         }
+
         // print(attendance.toJson());
         // put to map
         attendanceMap[personID] = attendance;
@@ -115,10 +126,11 @@ class AttendanceDataSource extends DataGridSource {
               DateTime? attTime = e.value;
 
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                alignment: Alignment.center,
                 child: Text(
                   attTime != null
-                      ? DateFormat("hh:mm:ss").format(attTime)
+                      ? DateFormat("HH:mm:ss").format(attTime)
                       : "--:--:--",
                   style: HanetTextStyles.cellText,
                 ),

@@ -35,8 +35,10 @@ class AttendanceController extends GetxController {
     try {
       if (respond.statusCode == 200) {
         HanetRespond respondData = HanetRespond.fromJson(respond.data);
-        for (var checkIn in respondData.data) {
-          ret.add(HanetCheckIn.fromJson(checkIn));
+        if (respond.data != null) {
+          for (var checkIn in respondData.data) {
+            ret.add(HanetCheckIn.fromJson(checkIn));
+          }
         }
       }
     } catch (e) {

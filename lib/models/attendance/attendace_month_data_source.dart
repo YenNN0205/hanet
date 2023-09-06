@@ -21,6 +21,7 @@ class AttendanceMonthDataSource extends DataGridSource {
   late final PersonController personController;
   late final List<HanetPerson> people;
   late List<List<AttendanceStatus>> _attendanceDatas;
+
   AttendanceMonthDataSource({
     required this.placeID,
     required this.pickedMonth,
@@ -59,10 +60,12 @@ class AttendanceMonthDataSource extends DataGridSource {
         (peopleIndex) =>
             List.generate(dayInMonth, (_) => AttendanceStatus.OTHER));
 
+    bool isCheckInListEmpty = checkIns.isEmpty;
+
     for (int i = 0; i < people.length; i++) {
       List<AttendanceStatus> personStatusList;
-      // skip if no check in datas exist
-      if (checkIns.length == 0) {
+      // skip if no check-in data exist
+      if (isCheckInListEmpty) {
         personStatusList =
             List.generate(dayInMonth, (index) => AttendanceStatus.OTHER);
         _attendanceDatas[i] = personStatusList;

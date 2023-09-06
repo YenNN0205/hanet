@@ -41,6 +41,8 @@ dependencies:
   month_year_picker: ^0.3.0+1
   table_calendar: ^3.0.9
   syncfusion_flutter_charts: ^22.2.10
+  syncfusion_flutter_datagrid_export: ^22.2.10
+  syncfusion_flutter_xlsio: ^22.2.10
 
 dev_dependencies:
   flutter_test:
