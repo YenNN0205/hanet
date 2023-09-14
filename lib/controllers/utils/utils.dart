@@ -3,7 +3,7 @@
 // return negative if first is before second
 // return positive if firse is after second
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
@@ -18,4 +18,17 @@ _exportToExcel(SfDataGridState state) async {
   final Workbook workbook = state.exportToExcelWorkbook();
   final List<int> bytes = workbook.saveAsStream();
   await File('DataGrid.xlsx').writeAsBytes(bytes, flush: true);
+}
+
+// support android, ios, web not for desktop
+bool isSupportPlatform() {
+  bool isNotSupported = true;
+  try {
+    if (Platform.isAndroid || Platform.isIOS) {
+      isNotSupported = false;
+    }
+  } catch (e) {
+    print("Exception detect platform");
+  }
+  return kIsWeb || !isNotSupported;
 }

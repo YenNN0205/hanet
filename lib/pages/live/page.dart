@@ -1,17 +1,14 @@
-import 'dart:convert';
-import 'dart:io';
+import 'package:hanet/controllers/utils/dart_ui/dart_ui.dart';
+// ignore: avoid_web_libraries_in_flutter
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:get/get.dart';
-
+import 'package:hanet/controllers/utils/utils.dart';
 import 'package:hanet/layout/app_layout.dart';
-import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
-
-import 'package:webview_flutter_web/webview_flutter_web.dart';
-import 'package:webview_flutter_plus/webview_flutter_plus.dart';
+import 'package:universal_html/html.dart' as universal_html;
+import 'package:webview_flutter/webview_flutter.dart';
 
 String CAMERA_URL =
     "rtsp://0.tcp.ap.ngrok.io:13067/user:1cinnovation;pwd:1cinnovation123";
@@ -26,41 +23,34 @@ class LiveScreen extends StatefulWidget {
 class _LiveScreenState extends State<LiveScreen> {
   late VlcPlayerController? _videoPlayerController;
 
-  late final WebViewPlusController _webViewController;
-  late final WebViewController webViewController;
-  PlatformWebViewController? _controller;
+  late final WebViewController _webViewController;
+
   bool isSupport = true;
   @override
   void initState() {
     super.initState();
     isSupport = isSupportPlatform();
     if (kIsWeb) {
-      _controller = PlatformWebViewController(
-        const PlatformWebViewControllerCreationParams(),
-      );
-      rootBundle.loadString("assets/camera/index.html").then((html) {
-        _controller!.loadRequest(LoadRequestParams(
-            uri: UriData.fromString(html,
-                    mimeType: "text/html",
-                    encoding: Encoding.getByName("utf-8"))
-                .uri));
-        setState(() {});
-      });
-    }
-  }
+      platformViewRegistry.registerViewFactory("camera_view", (id) {
+        var _iframeElement = universal_html.IFrameElement();
+        _iframeElement.height = '500';
+        _iframeElement.allow = "microphone";
+        _iframeElement.src = "https://vinhpna1c.github.io/ezviz-camera-live/";
 
-// support android, ios, web not for desktop
-  bool isSupportPlatform() {
-    bool isNotSupported = true;
-    try {
-      print(defaultTargetPlatform);
-      if (Platform.isAndroid || Platform.isIOS) {
-        isNotSupported = false;
-      }
-    } catch (e) {
-      print("Exception detect platform");
+        return _iframeElement;
+      });
+      // _controller = PlatformWebViewController(
+      //   const PlatformWebViewControllerCreationParams(),
+      // );
+      // rootBundle.loadString("assets/camera/index.html").then((html) {
+      //   _controller!.loadRequest(LoadRequestParams(
+      //       uri: UriData.fromString(html,
+      //               mimeType: "text/html",
+      //               encoding: Encoding.getByName("utf-8"))
+      //           .uri));
+      //   setState(() {});
+      // });
     }
-    return kIsWeb && !isNotSupported;
   }
 
   @override
@@ -68,30 +58,25 @@ class _LiveScreenState extends State<LiveScreen> {
     Widget child;
     Size size = Get.size;
     if (isSupport) {
-      // if (kIsWeb) {
-      //   // _controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-      //   // _controller.loadRequest(
-      //   //   LoadRequestParams(
-      //   //     uri: Uri.file('assets/camera/index.html'),
-      //   //   ),
-      //   // );
-      //   child = PlatformWebViewWidget(
-      //           PlatformWebViewWidgetCreationParams(controller: _controller!))
-      //       .build(context);
-      // } else {
-      child = WebViewPlus(
-        initialUrl: "assets/camera/index.html",
-        onWebViewCreated: (controller) {
-          _webViewController = controller;
-        },
-        javascriptMode: JavascriptMode.unrestricted,
-        initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-        allowsInlineMediaPlayback: true,
-      );
-      // }
+      if (kIsWeb) {
+        child = HtmlElementView(key: UniqueKey(), viewType: "camera_view");
+      } else {
+        _webViewController = WebViewController(
+          onPermissionRequest: (request) {
+            print("Request from webview");
+          },
+        );
+        _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
+        _webViewController.setNavigationDelegate(NavigationDelegate());
+        _webViewController.loadRequest(
+            Uri.parse("https://vinhpna1c.github.io/ezviz-camera-live/"));
+        child = WebViewWidget(
+          controller: _webViewController,
+        );
+      }
     } else {
-      child = const Center(
-        child: Text(
+      child = Center(
+        child: const Text(
           "Not support on this operating system!",
           style: TextStyle(
             fontSize: 14,
@@ -105,8 +90,7 @@ class _LiveScreenState extends State<LiveScreen> {
         child: Center(
       child: Container(
         width: size.width,
-        height: 600,
-        color: Colors.black,
+        color: isSupport ? Colors.white : Colors.black,
         child: child,
       ),
     ));

@@ -10,6 +10,5 @@ class AssetImages {
 }
 
 class AssetAssets {
-	static const String camera = 'assets/camera.zip';
 }
 
