@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>Document</title>
+  <script src="./ezuikit.js"></script>
+</head>
+
+<body>
+  <div className="demo">
+    <h2>Video demo：</h2>
+    <div id="video-container">
+    </div>
+    <div>
+      <button onClick="play()">play</button>
+      <button onClick="stop()">stop</button>
+      <button onClick="getOSDTime()">getOSDTime</button>
+      <button onClick="getOSDTime2()">getOSDTime2</button>
+      <button onClick="capturePicture()">capturePicture</button>
+      <button onClick="openSound()">openSound</button>
+      <button onClick="closeSound()">closeSound</button>
+      <button onClick="startSave()">startSave</button>
+      <button onClick="stopSave()">stopSave</button>
+      <button onClick="ezopenStartTalk()">StartTalk</button>
+      <button onClick="ezopenStopTalk()">StopTalk</button>
+      <button onClick="fullScreen()">Fullscreen</button>
+    </div>
+  </div>
+  <script>
+    var playr;
+    fetch('https://open.ys7.com/jssdk/ezopen/demo/token')
+      .then(response => response.json())
+      .then(res => {
+        var accessToken = res.data.accessToken;
+        playr = new EZUIKit.EZUIKitPlayer({
+          id: 'video-container',
+          accessToken: 'at.4w1j1zaf86twsdl24p6m9nqn4fpqgqk5-6pn292h497-0eclc60-q4tdvf235',
+          url: 'ezopen://open.ezviz.com/BA3686955/1.hd.live',
+
+          template: 'simple',
+
+          plugin: ['talk'],
+          deocoder: "",
+          width: 600,
+          height: 400,
+          env: {
+            domain: "https://isgpopen.ezvizlife.com"
+          }
+        });
+      });
+    function fullScreen() {
+      var playPromise = playr.fullScreen();
+      playPromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function play() {
+      var playPromise = playr.play();
+      playPromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function stop() {
+      var stopPromise = playr.stop();
+      stopPromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function getOSDTime() {
+      var getOSDTimePromise = playr.getOSDTime();
+      getOSDTimePromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function getOSDTime2() {
+      var getOSDTimePromise = playr2.getOSDTime();
+      getOSDTimePromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function capturePicture() {
+      var capturePicturePromise = playr.capturePicture();
+      capturePicturePromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function openSound() {
+      var openSoundPromise = playr.openSound();
+      openSoundPromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function closeSound() {
+      var closeSoundPromise = playr.closeSound();
+      closeSoundPromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function startSave() {
+      var startSavePromise = playr.startSave();
+      startSavePromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function stopSave() {
+      var stopSavePromise = playr.stopSave();
+      stopSavePromise.then((data) => {
+        console.log("promise 获取 数据", data)
+      })
+    }
+    function ezopenStartTalk() {
+      playr.startTalk();
+    }
+    function ezopenStopTalk() {
+      playr.stopTalk();
+    }
+  </script>
+</body>
+
+</html>
