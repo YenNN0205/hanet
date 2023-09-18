@@ -41,14 +41,14 @@ final List<Map<String, Object>> MenuOptions = [
     "icon": Icons.checklist_rtl_sharp,
     "route": Routes.ATTENDANCE,
   },
-  {
-    "title": "Announcement",
-    "icon": Icons.notifications_active,
-    "route": Routes.DASHBOARD,
-  },
-  {
-    "title": "Settings",
-    "icon": Icons.settings,
-    "route": Routes.DASHBOARD,
-  },
+  // {
+  //   "title": "Announcement",
+  //   "icon": Icons.notifications_active,
+  //   "route": Routes.DASHBOARD,
+  // },
+  // {
+  //   "title": "Settings",
+  //   "icon": Icons.settings,
+  //   "route": Routes.DASHBOARD,
+  // },
 ];
